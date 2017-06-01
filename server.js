@@ -16,9 +16,9 @@ app.use(bodyParser.json({type:"application/vnd.api+json"}));
 app.use(express.static("./public"));
 
 if(process.env.MONGODB_URI){
-  mongoose = connect(process.env.MONGODB_URI);
+  mongoose = mongoose.connect(process.env.MONGODB_URI);
 } else {
-  mongoose = connect("mongodb://localhost/week19HW");
+  mongoose = mongoose.connect("mongodb://localhost/week19HW");
 }
 
 var db = mongoose.connection;
@@ -30,7 +30,7 @@ db.once("open", function(){
   console.log("Mongoose connection successful");
 });
 
-var expressRoutes = require("./routes/experssRoutes.js");
+var expressRoutes = require("./routes/expressRoutes.js");
 app.use(expressRoutes);
 
 app.listen(PORT, function(){
