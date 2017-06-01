@@ -32,6 +32,9 @@ db.once("open", function(){
 
 var expressRoutes = require("./routes/expressRoutes.js");
 app.use(expressRoutes);
+app.use(function(req, res){
+  res.sendFile(__dirname + "/public/index.html");
+});
 
 app.listen(PORT, function(){
   console.log("App listening on PORT: "+PORT);
