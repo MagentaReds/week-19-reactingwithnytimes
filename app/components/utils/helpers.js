@@ -16,13 +16,31 @@ var helpers = {
     if(endYear)
       params+="&end_date="+startYear+"1231";
     
-    console.log(baseUrl);
-    console.log(params);
+    //console.log(baseUrl);
+    //console.log(params);
 
     return axios.get(baseUrl+params);
   },
 
-  getMe: 5
+  saveArticle: function(article) {
+    var newArticle = {
+      headline: article.headline.main,
+      sectionName: article.section_name,
+      pubDate: article.pub_date,
+      url: article.web_url
+    };
+    newArticle.by = article.byline ? article.byline.original : "No Author";
+    
+    return axios.post("/api/saved", newArticle);
+  },
+
+  getSavedArticles: function() {
+    return axios.get("/api/saved");
+  },
+
+  removeArticle: function(id){
+    return axios.delete("/api/saved", {params: {id: id}});
+  },
 };
 
 module.exports = helpers;

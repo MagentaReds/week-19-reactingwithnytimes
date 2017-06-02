@@ -3,6 +3,8 @@ var Route = router.Route;
 var Link = require("react-router-dom").Link;
 var IndexRoute = router.IndexRoute;
 
+var helpers = require("./utils/helpers.js");
+
 var Search = require("./children/Search.js");
 var Results = require("./children/Results.js");
 var Saved = require("./children/Saved.js");
@@ -23,6 +25,16 @@ class Main extends Component {
     };
   }
 
+  componentDidMount() {
+    // Get the latest history.
+    helpers.getSavedArticles().then(function(response) {
+      console.log(response);
+      if (response.data !== this.state.savedArticles) {
+        console.log("Saved Articles", response.data);
+        this.setState({ savedArticles: response.data });
+      }
+    }.bind(this));
+  }
 
   setSearch(term, limit, startYear, endYear) {
     this.setState({
@@ -37,16 +49,25 @@ class Main extends Component {
     this.setState({searchResults: results});
   }
 
-  saveArticle(article) {
-
+  saveArticle(index) {
+    console.log("Saving article at index " +index+" to mongodb");
+    helpers.saveArticle(this.state.searchResults[index]).then(function(response){
+      this.getArticles();
+    }.bind(this));
   }
 
-  deleteArticle(id) {
-
+  removeArticle(id) {
+    console.log("Removing article with id " +id+" from mongodb");
+    helpers.removeArticle(id).then(function(response){
+      this.getArticles();
+    }.bind(this));
   }
 
   getArticles() {
-    
+    console.log("Getting all saved articles from mongodb");
+    helpers.getSavedArticles().then(function(response){
+      this.setState(response.data);
+    }.bind(this));
   }
 
   render() {
@@ -64,10 +85,9 @@ class Main extends Component {
         <Search setSearch={this.setSearch.bind(this)} setResults={this.setResults.bind(this)}/> 
         <br/><br/>
         <div>
-          {this.props.children}
-          <Route exact path="/" render={()=><Results passedResults={this.state.searchResults}/>}/>
-          <Route path="/results" render={()=><Results passedResults={this.state.searchResults} />} />
-          <Route path="/saved" render={()=><Saved savedArticles={this.state.savedArticles} />} />
+          <Route exact path="/" render={()=><Results passedResults={this.state.searchResults} saveArticle={this.saveArticle.bind(this)}/>}/>
+          <Route path="/results" render={()=><Results passedResults={this.state.searchResults} saveArticle={this.saveArticle.bind(this)}/>} />
+          <Route path="/saved" render={()=><Saved savedArticles={this.state.savedArticles} removeArticle={this.removeArticle.bind(this)}/>} />
         </div>
       </div>
       
