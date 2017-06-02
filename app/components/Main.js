@@ -25,6 +25,10 @@ class Main extends Component {
     };
   }
 
+  componentDidUpdate(prevState) {
+    console.log(this.state.savedArticles);
+  }
+
   componentDidMount() {
     // Get the latest history.
     helpers.getSavedArticles().then(function(response) {
@@ -66,7 +70,7 @@ class Main extends Component {
   getArticles() {
     console.log("Getting all saved articles from mongodb");
     helpers.getSavedArticles().then(function(response){
-      this.setState(response.data);
+      this.setState({savedArticles: response.data});
     }.bind(this));
   }
 
