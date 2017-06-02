@@ -1,10 +1,46 @@
 
 var Link = require("react-router").Link;
+var helpers = require("../utils/helpers.js");
 
 
 import React, {Component} from "react";
 
 class Search extends Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      searchTerm: "",
+      limit: 5,
+      startYear: "",
+      endYear: ""
+    };
+  }
+
+  handleSubmit(event){
+    event.preventDefault();
+
+    //var inputs = $("#searchBox").serializeArray();
+
+    var searchTerm = document.getElementsByName("searchTerm")[0].value;
+    var limit = document.getElementsByName("retrieveNumber")[0].value;
+    var startYear = document.getElementsByName("startYear")[0].value;
+    var endYear = document.getElementsByName("endYear")[0].value;
+    console.log(searchTerm);
+
+    this.props.setSearch(searchTerm, limit, startYear, endYear);
+    this.setState(searchTerm, limit, startYear, endYear);
+
+    helpers.getNyTimesArticles(searchTerm, startYear, endYear).then(function(response){
+      console.log(response);
+      var returns = [];
+      for(var i=0; i<limit && i<response.data.response.docs.length; ++i)
+        returns.push(response.data.response.docs[i]);
+
+      this.props.setResults(returns);
+    });
+  }
+
   render() {
     return (
 
@@ -14,14 +50,14 @@ class Search extends Component {
             <span className="glyphicon glyphicon-th-list"> Search Parameters</span> 
         </div>
         <div className="panel-body">
-          <form>
+          <form onSubmit={this.handleSubmit} id="searchBox">
             <div className="form-group">
               <label htmlFor="searchTerm">Search Term</label>
-              <input type="text" className="form-control" id="searchTerm" placeholder="Search anything"/>
+              <input type="text" className="form-control" name="searchTerm" placeholder="Search anything" value={this.searchTerm}/>
             </div>
             <div className="form-group">
               <label htmlFor="retrieveNumber">Number of Records to Retrieve</label>
-              <select className="form-control" id="retrieveNumber" value="5">
+              <select className="form-control" name="retrieveNumber" value={this.limit}>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -36,13 +72,13 @@ class Search extends Component {
             </div>
             <div className="form-group">
               <label htmlFor="startYear">Start Year (Optional)</label>
-              <input type="text" className="form-control" id="startYear" placeholder="" />
+              <input type="text" className="form-control" name="startYear" placeholder="" value={this.startYear}/>
             </div>
             <div className="form-group">
               <label htmlFor="endYear">End Year (Optional)</label>
-              <input type="text" className="form-control" id="endYear" placeholder=""/>
+              <input type="text" className="form-control" name="endYear" placeholder="" value={this.endYear}/>
             </div>
-            <button id="searchButton" className="btn btn-default">Search</button>
+            <button type="submit" id="searchButton" className="btn btn-default">Search</button>
             <button id="clearButton" className="btn btn-default">Clear Results</button>
           </form>
         </div>

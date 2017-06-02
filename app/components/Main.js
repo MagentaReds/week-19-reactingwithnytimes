@@ -10,6 +10,33 @@ var Saved = require("./children/Saved.js");
 import React, {Component} from "react";
 
 class Main extends Component {
+
+  constructor(props){
+    super(props);
+    this.state = { 
+      searchTerm: "", 
+      limit: 5,
+      beginYear: "",
+      endYear: "",
+      searchResults: [], 
+      savedArticles: []
+    };
+  }
+
+
+  setSearch(term, limit, beginYear, endYear) {
+    this.setState({
+      searchTerm: term,
+      limit: limit,
+      beginYear: beginYear,
+      endYear: endYear
+    });
+  }
+
+  setResults(results) {
+    this.setState({searchResuts: results});
+  }
+
   render() {
     return (
       <div className="container">
@@ -22,7 +49,7 @@ class Main extends Component {
           <Link to="/results"><button className="btn btn-success btn-lg">Results</button></Link>
           <Link to="/saved"><button className="btn btn-warning btn-lg">Saved Articles</button></Link>
         </div>
-        <Search /> 
+        <Search setSearch={this.setSearch} setResults={this.setResults}/> 
         <br/><br/>
         <div>
           {this.props.children}
