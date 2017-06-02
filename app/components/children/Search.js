@@ -29,8 +29,14 @@ class Search extends Component {
     console.log(searchTerm);
 
     this.props.setSearch(searchTerm, limit, startYear, endYear);
-    this.setState(searchTerm, limit, startYear, endYear);
+    this.setState({
+      searchTerm: searchTerm,
+       limit: limit, 
+       startYear: startYear, 
+       endYear: endYear
+    });
 
+    
     helpers.getNyTimesArticles(searchTerm, startYear, endYear).then(function(response){
       console.log(response);
       var returns = [];
@@ -38,7 +44,20 @@ class Search extends Component {
         returns.push(response.data.response.docs[i]);
 
       this.props.setResults(returns);
-    });
+    }.bind(this));
+  }
+
+  updateSearchTerm(event){
+    this.setState({searchTerm: event.target.value});
+  }
+  updateLimit(event){
+    this.setState({limit: event.target.value});
+  }
+  updateStartYear(event){
+    this.setState({startYear: event.target.value});
+  }
+  updateEndYear(event){
+    this.setState({endYear: event.target.value});
   }
 
   render() {
@@ -50,14 +69,14 @@ class Search extends Component {
             <span className="glyphicon glyphicon-th-list"> Search Parameters</span> 
         </div>
         <div className="panel-body">
-          <form onSubmit={this.handleSubmit} id="searchBox">
+          <form onSubmit={this.handleSubmit.bind(this)} id="searchBox">
             <div className="form-group">
               <label htmlFor="searchTerm">Search Term</label>
-              <input type="text" className="form-control" name="searchTerm" placeholder="Search anything" value={this.searchTerm}/>
+              <input type="text" className="form-control" name="searchTerm" placeholder="Search anything" value={this.state.searchTerm} onChange={this.updateSearchTerm.bind(this)}/>
             </div>
             <div className="form-group">
               <label htmlFor="retrieveNumber">Number of Records to Retrieve</label>
-              <select className="form-control" name="retrieveNumber" value={this.limit}>
+              <select className="form-control" name="retrieveNumber" value={this.state.limit} onChange={this.updateLimit.bind(this)}>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -72,11 +91,11 @@ class Search extends Component {
             </div>
             <div className="form-group">
               <label htmlFor="startYear">Start Year (Optional)</label>
-              <input type="text" className="form-control" name="startYear" placeholder="" value={this.startYear}/>
+              <input type="text" className="form-control" name="startYear" placeholder="" value={this.state.startYear} onChange={this.updateStartYear.bind(this)}/>
             </div>
             <div className="form-group">
               <label htmlFor="endYear">End Year (Optional)</label>
-              <input type="text" className="form-control" name="endYear" placeholder="" value={this.endYear}/>
+              <input type="text" className="form-control" name="endYear" placeholder="" value={this.state.endYear} onChange={this.updateEndYear.bind(this)}/>
             </div>
             <button type="submit" id="searchButton" className="btn btn-default">Search</button>
             <button id="clearButton" className="btn btn-default">Clear Results</button>

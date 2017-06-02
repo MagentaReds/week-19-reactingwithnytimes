@@ -16,7 +16,7 @@ class Main extends Component {
     this.state = { 
       searchTerm: "", 
       limit: 5,
-      beginYear: "",
+      startYear: "",
       endYear: "",
       searchResults: [], 
       savedArticles: []
@@ -24,17 +24,29 @@ class Main extends Component {
   }
 
 
-  setSearch(term, limit, beginYear, endYear) {
+  setSearch(term, limit, startYear, endYear) {
     this.setState({
       searchTerm: term,
       limit: limit,
-      beginYear: beginYear,
+      startYear: startYear,
       endYear: endYear
     });
   }
 
   setResults(results) {
-    this.setState({searchResuts: results});
+    this.setState({searchResults: results});
+  }
+
+  saveArticle(article) {
+
+  }
+
+  deleteArticle(id) {
+
+  }
+
+  getArticles() {
+    
   }
 
   render() {
@@ -49,13 +61,13 @@ class Main extends Component {
           <Link to="/results"><button className="btn btn-success btn-lg">Results</button></Link>
           <Link to="/saved"><button className="btn btn-warning btn-lg">Saved Articles</button></Link>
         </div>
-        <Search setSearch={this.setSearch} setResults={this.setResults}/> 
+        <Search setSearch={this.setSearch.bind(this)} setResults={this.setResults.bind(this)}/> 
         <br/><br/>
         <div>
           {this.props.children}
-          <Route exact path="/" component={Results}/>
-          <Route path="/results" component={Results} />
-          <Route path="/saved" component={Saved} />
+          <Route exact path="/" render={()=><Results passedResults={this.state.searchResults}/>}/>
+          <Route path="/results" render={()=><Results passedResults={this.state.searchResults} />} />
+          <Route path="/saved" render={()=><Saved savedArticles={this.state.savedArticles} />} />
         </div>
       </div>
       

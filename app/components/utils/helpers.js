@@ -5,7 +5,7 @@ var axios = require("axios");
 var apiKey =  "1021dd8629d24dae81e2576852693881";
 
 // Helper functions for making API Calls
-var helper = {
+var helpers = {
   //returns a promise from axios get to the nytimes api.
   getNyTimesArticles: function(searchTerm, startYear, endYear){
     var baseUrl = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
@@ -20,7 +20,9 @@ var helper = {
     console.log(params);
 
     return axios.get(baseUrl+params);
-  }
+  },
+
+  getMe: 5
 };
 
-module.exports = helper;
+module.exports = helpers;
