@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scott's Tots NYT Search</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+   <style type="text/css">
+      .background {
+        background-image: url(https://images-na.ssl-images-amazon.com/images/I/41g0olmguVL._SY300_.jpg);
+        background-repeat: repeat-x;
+      }
+      .headertext {
+        background-color: gray;
+        opacity: 0.9;
+       color: white;
+      }
+    </style>
+</head>
+<body>
+<div class="container">
+<div class="jumbotron background">
+  <div class="headertext">
+  <h1>Scott's Tots NYT Search</h1>
+  <p>The World's Second Finest News Source</p>
+  </div>
+  <p><a class="btn btn-primary btn-lg" href="http://giphy.com/gifs/ohio-john-kasich-scotts-tots-uCxR4xD2XDfhK" target="_blank" role="button">Learn more</a></p>
+</div>
+  <!-- Search Paramemters Box -->
+  <div class="panel panel-primary">
+    <div class="panel-heading panelBack">
+        <span class="glyphicon glyphicon-th-list"> Search Parameters</span> 
+    </div>
+    <div class="panel-body">
+      <form>
+        <div class="form-group">
+          <label for="searchTerm">Search Term</label>
+          <input type="text" class="form-control" id="searchTerm" placeholder="Search anything">
+        </div>
+        <div class="form-group">
+          <label for="retrieveNumber">Number of Records to Retrieve</label>
+          <select class="form-control" id="retrieveNumber">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5" selected>5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="startYear">Start Year (Optional)</label>
+          <input type="text" class="form-control" id="startYear" placeholder="">
+        </div>
+        <div class="form-group">
+          <label for="endYear">End Year (Optional)</label>
+          <input type="text" class="form-control" id="endYear" placeholder="">
+        </div>
+        <button type="submit" id="searchButton" class="btn btn-default">Search</button>
+        <button type="submit" id="clearButton" class="btn btn-default">Clear Results</button>
+      </form>
+    </div>
+  </div>
+  <br><br>
+  <!-- Results Box -->
+  <div class="panel panel-primary">
+    <div class="panel-heading panelBack">
+      <span class="glyphicon glyphicon-paperclip"> Results</span> 
+    </div>
+    <div id="our-results" class="panel-body">
+      <!--Example Result -->
+      <div id="result_1" class="well hidden">
+        <h2><span class="btn btn-primary">1</span> The Art oF Fake</h2>
+        <p>by BARNET L. LICHENSTEIN</p>
+        <p>Section: Opinon</p>
+        <p>9817329857239587239587</p>
+        <a>http://www.nytimes.com/2017/02/01/opinion/the-art-of-the-deal-in-afghanistan.html</a>
+      </div>
+        
+    </div>
+  </div>
+</div>
+</body>
+<script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+<script type="text/javascript">
+  //Grant's NYT Api Key, douhgnut steel
+  var apiKey =  "1021dd8629d24dae81e2576852693881";
+  var baseUrl= "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+  var myParams = $.param({
+    'api-key': apiKey
+  });
+  function makeArticleHtml(article, num) {
+    var myDiv = $("<div>");
+    myDiv.attr("id", "result_"+num);
+    myDiv.addClass("well");
+    myDiv.append($("<h2><span class=\"btn btn-primary\">"+
+                    num+
+                    "</span> "+
+                    article.headline.main+
+                    "</h2>"));
+    myDiv.append($("<p>"+article.byline.original+"</p>"));
+    myDiv.append($("<p>Section: "+article.section_name+"</p>"));
+    myDiv.append($("<p>"+article.pub_date+"</p>"));
+    tempLink=$("<a>");
+    tempLink.attr("href", article.web_url);
+    tempLink.attr("target", "_blank");
+    tempLink.text(article.web_url);
+    myDiv.append(tempLink);
+    return myDiv;
+  }
+  function displayArticles(response, num) {
+    $("#our-results").empty();
+    var temp=null;
+    for(var i=1; i<=num; ++i) {
+      console.log(response.docs[i]);
+      temp=makeArticleHtml(response.docs[i], i);
+      $("#our-results").append(temp);
+    }
+  }
+  $("#searchButton").on("click", function(event) {
+    //do stuff on click
+    event.preventDefault();
+    var myParamObject = {
+      'api-key': apiKey
+    };
+    //checking forms for values to get ajax parameters
+    var tempValue = $("#searchTerm").val();
+    //console.log("1 "+tempValue);
+    if(tempValue!=="")
+      myParamObject["q"] = tempValue;
+    tempValue = $("#startYear").val();
+    //console.log("2 "+tempValue);
+    if(tempValue!=="")
+      myParamObject["begin_date"] = tempValue+"0101";
+    tempValue = $("#endYear").val();
+    //console.log("3 "+tempValue);
+    if(tempValue!=="")
+      myParamObject["end_date"] = tempValue+"1231";
+    var url=baseUrl+'?'+$.param(myParamObject);
+    console.log(url);
+    
+    $.ajax({
+      url: url,
+      method: "GET"
+    }).done(function(response) {
+      console.log(response);
+      displayArticles(response.response, $("#retrieveNumber").val());
+    });
+    
+  });
+ $("#clearButton").on("click", function(event) {
+    //do stuff on click
+    preventDefault();
+    $("#our-results").empty();
+  });
+</script>
+</html>
