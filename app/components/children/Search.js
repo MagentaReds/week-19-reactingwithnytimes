@@ -31,9 +31,9 @@ class Search extends Component {
     this.props.setSearch(searchTerm, limit, startYear, endYear);
     this.setState({
       searchTerm: searchTerm,
-       limit: limit, 
-       startYear: startYear, 
-       endYear: endYear
+      limit: limit, 
+      startYear: startYear, 
+      endYear: endYear
     });
 
     
@@ -58,6 +58,18 @@ class Search extends Component {
   }
   updateEndYear(event){
     this.setState({endYear: event.target.value});
+  }
+  clearSearch(event) {
+    event.preventDefault();
+    var newState = {
+      searchTerm: "", 
+      limit: 5,
+      startYear: "",
+      endYear: "",
+      searchResults: []
+    };
+    this.setState(newState);
+    this.props.clearSearch();
   }
 
   render() {
@@ -98,7 +110,7 @@ class Search extends Component {
               <input type="text" className="form-control" name="endYear" placeholder="" value={this.state.endYear} onChange={this.updateEndYear.bind(this)}/>
             </div>
             <button type="submit" id="searchButton" className="btn btn-default">Search</button>
-            <button id="clearButton" className="btn btn-default">Clear Results</button>
+            <button id="clearButton" className="btn btn-danger" onClick={this.clearSearch.bind(this)}>Clear Results</button>
           </form>
         </div>
       </div>
