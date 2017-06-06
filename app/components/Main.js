@@ -35,15 +35,15 @@ class Main extends Component {
   }
 
   componentDidUpdate(prevState) {
-    console.log(this.state.savedArticles);
+    //console.log(this.state.savedArticles);
   }
 
   componentDidMount() {
     // Get the latest history.
     helpers.getSavedArticles().then((response) => {
-      console.log(response);
+      //console.log(response);
       if (response.data !== this.state.savedArticles) {
-        console.log("Saved Articles", response.data);
+        //console.log("Saved Articles", response.data);
         this.setState({ savedArticles: response.data });
       }
     });
@@ -63,28 +63,28 @@ class Main extends Component {
   }
 
   saveArticle(index) {
-    console.log("Saving article at index " +index+" to mongodb");
+    //console.log("Saving article at index " +index+" to mongodb");
     helpers.saveArticle(this.state.searchResults[index]).then((response) => {
       this.getArticles();
     });
   }
 
   removeArticle(id) {
-    console.log("Removing article with id " +id+" from mongodb");
+    //console.log("Removing article with id " +id+" from mongodb");
     helpers.removeArticle(id).then((response) => {
       this.getArticles();
     });
   }
 
   getArticles() {
-    console.log("Getting all saved articles from mongodb");
+    //console.log("Getting all saved articles from mongodb");
     helpers.getSavedArticles().then((response) => {
       this.setState({savedArticles: response.data});
     });
   }
 
   clearSearch() {
-    console.log("Clearing search history and resetting the search fields");
+    //console.log("Clearing search history and resetting the search fields");
     var newState = {
       searchTerm: "", 
       limit: 5,

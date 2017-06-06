@@ -30,7 +30,7 @@ class Search extends Component {
     var limit = document.getElementsByName("retrieveNumber")[0].value;
     var startYear = document.getElementsByName("startYear")[0].value;
     var endYear = document.getElementsByName("endYear")[0].value;
-    console.log(searchTerm);
+    //console.log(searchTerm);
 
     this.props.setSearch(searchTerm, limit, startYear, endYear);
     this.setState({
@@ -42,7 +42,7 @@ class Search extends Component {
 
     if(searchTerm) {
       helpers.getNyTimesArticles(searchTerm, startYear, endYear).then((response) => {
-        console.log(response);
+        //console.log(response);
         var returns = [];
         for(var i=0; i<limit && i<response.data.response.docs.length; ++i)
           returns.push(response.data.response.docs[i]);
