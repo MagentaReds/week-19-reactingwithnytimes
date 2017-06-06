@@ -1,14 +1,15 @@
-var router = require("react-router-dom");
-var Route = router.Route;
-var Link = require("react-router-dom").Link;
-var IndexRoute = router.IndexRoute;
+// var router = require("react-router-dom");
+// var Route = router.Route;
+// var Link = require("react-router-dom").Link;
+
+import {Route, Link} from "react-router-dom";
 
 var helpers = require("./utils/helpers.js");
 
-var Search = require("./children/Search.js");
-var Results = require("./children/Results.js");
-//var Saved = require("./children/Saved.js");
-import Saved from "./children/Saved.js"
+import Search from "./children/Search.js";
+import Saved from "./children/Saved.js";
+import Results from "./children/Results.js";
+import MoreInfoModal from "./children/MoreInfoModal.js";
 
 import React, {Component} from "react";
 
@@ -24,6 +25,13 @@ class Main extends Component {
       searchResults: [], 
       savedArticles: []
     };
+
+    this.setSearch = this.setSearch.bind(this);
+    this.setResults = this.setResults.bind(this);
+    this.saveArticle = this.saveArticle.bind(this);
+    this.removeArticle = this.removeArticle.bind(this);
+    this.getArticles = this.getArticles.bind(this);
+    this.clearSearch = this.clearSearch.bind(this);
   }
 
   componentDidUpdate(prevState) {
@@ -32,13 +40,13 @@ class Main extends Component {
 
   componentDidMount() {
     // Get the latest history.
-    helpers.getSavedArticles().then(function(response) {
+    helpers.getSavedArticles().then((response) => {
       console.log(response);
       if (response.data !== this.state.savedArticles) {
         console.log("Saved Articles", response.data);
         this.setState({ savedArticles: response.data });
       }
-    }.bind(this));
+    });
   }
 
   setSearch(term, limit, startYear, endYear) {
@@ -56,23 +64,23 @@ class Main extends Component {
 
   saveArticle(index) {
     console.log("Saving article at index " +index+" to mongodb");
-    helpers.saveArticle(this.state.searchResults[index]).then(function(response){
+    helpers.saveArticle(this.state.searchResults[index]).then((response) => {
       this.getArticles();
-    }.bind(this));
+    });
   }
 
   removeArticle(id) {
     console.log("Removing article with id " +id+" from mongodb");
-    helpers.removeArticle(id).then(function(response){
+    helpers.removeArticle(id).then((response) => {
       this.getArticles();
-    }.bind(this));
+    });
   }
 
   getArticles() {
     console.log("Getting all saved articles from mongodb");
-    helpers.getSavedArticles().then(function(response){
+    helpers.getSavedArticles().then((response) => {
       this.setState({savedArticles: response.data});
-    }.bind(this));
+    });
   }
 
   clearSearch() {
@@ -95,17 +103,18 @@ class Main extends Component {
           <h1>Scott's Tots NYT Search</h1>
           <p>The World's Second Finest News Source</p>
           </div>
-          <a className="btn btn-primary btn-lg" href="http://giphy.com/gifs/ohio-john-kasich-scotts-tots-uCxR4xD2XDfhK" target="_blank" role="button">Learn more</a>
+          <a className="btn btn-primary btn-lg" href="#moreInfoModal" data-toggle="modal" >Learn more</a>
           <Link to="/results"><button className="btn btn-success btn-lg">Results</button></Link>
           <Link to="/saved"><button className="btn btn-warning btn-lg">Saved Articles</button></Link>
         </div>
-        <Search setSearch={this.setSearch.bind(this)} setResults={this.setResults.bind(this)} clearSearch={this.clearSearch.bind(this)}/> 
+        <Search setSearch={this.setSearch} setResults={this.setResults} clearSearch={this.clearSearch}/> 
         <br/><br/>
         <div>
-          <Route exact path="/" render={()=><Results passedResults={this.state.searchResults} saveArticle={this.saveArticle.bind(this)}/>}/>
-          <Route path="/results" render={()=><Results passedResults={this.state.searchResults} saveArticle={this.saveArticle.bind(this)}/>} />
-          <Route path="/saved" render={()=><Saved title="Saved Results" savedArticles={this.state.savedArticles} removeArticle={this.removeArticle.bind(this)}/>} />
+          <Route exact path="/" render={()=><Results passedResults={this.state.searchResults} saveArticle={this.saveArticle}/>}/>
+          <Route path="/results" render={()=><Results passedResults={this.state.searchResults} saveArticle={this.saveArticle}/>} />
+          <Route path="/saved" render={()=><Saved savedArticles={this.state.savedArticles} removeArticle={this.removeArticle}/>} />
         </div>
+        <MoreInfoModal />
       </div>
       
     );
@@ -134,4 +143,4 @@ class Main extends Component {
 }*/
 
 
-module.exports = Main;
+export default Main;
