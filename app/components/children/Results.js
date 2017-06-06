@@ -1,44 +1,35 @@
-
-var Link = require("react-router").Link;
-
-
 import React, {Component} from "react";
 
-class Results extends Component {
-
-  saveArticle(event) {
-    var index = event.target.name
-    
-    this.props.saveArticle(index);
+const Results = (props) => {
+  const saveArticle = (event) =>{
+    var index = event.target.name;
+    props.saveArticle(index);
   }
 
-  render() {
-    return (
-      <div className="panel panel-primary">
-        <div className="panel-heading panelBack">
-          <span className="glyphicon glyphicon-paperclip">Results</span> 
-        </div>
-        <div id="our-results" className="panel-body">
-          
-          {this.props.passedResults.map(function(article, i){
-            return (
-              <div id={"result_"+(i+1)} className="well">
-                <h2><span className="btn btn-primary">{i+1}</span>{article.headline.main}</h2>
-                <p>{article.byline ? article.byline.original : "No Author"}</p>
-                <p>{article.section_name}</p>
-                <p>{article.pub_date}</p>
-                <a href={article.web_url} target="_blank" >{article.web_url}</a>
-                <br/>
-                <button name={i} className="btn btn-primary" onClick={this.saveArticle.bind(this)}>Save Article</button>
-              </div>
-            );
-          }.bind(this))}
-          
-            
-        </div>
+  return (
+    <div className="panel panel-primary">
+      <div className="panel-heading panelBack">
+        <span className="glyphicon glyphicon-paperclip"> Results</span> 
       </div>
-    );
-  }
+      <div id="our-results" className="panel-body">
+        
+        {props.passedResults.map((article, i) => (
+            <div key={i} id={"result_"+(i+1)} className="well">
+              <h2><span className="btn btn-primary">{i+1}</span>{article.headline.main}</h2>
+              <p>{article.byline ? article.byline.original : "No Author"}</p>
+              <p>{article.section_name}</p>
+              <p>{article.pub_date}</p>
+              <a href={article.web_url} target="_blank" >{article.web_url}</a>
+              <br/>
+              <button name={i} className="btn btn-primary" onClick={saveArticle}>Save Article</button>
+            </div>
+          ))
+        }
+          
+      </div>
+    </div>
+  );
 }
 
-module.exports = Results;
+
+export default Results;
