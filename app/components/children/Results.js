@@ -15,7 +15,7 @@ const Results = (props) => {
         
         {props.passedResults.map((article, i) => (
             <div key={i} id={"result_"+(i+1)} className="well">
-              <h2><span className="btn btn-primary">{i+1}</span>{article.headline.main}</h2>
+              <h2><span className="btn btn-primary">{i+1}</span> {article.headline.main}</h2>
               <p>{article.byline ? article.byline.original : "No Author"}</p>
               <p>{article.section_name}</p>
               <p>{article.pub_date}</p>

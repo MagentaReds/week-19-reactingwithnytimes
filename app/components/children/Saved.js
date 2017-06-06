@@ -15,13 +15,14 @@ const Saved = (props) => {
         
         {props.savedArticles.map((article, i) => (
             <div key={i} id={"result_"+(i+1)} className="well">
-              <h2><span className="btn btn-primary">{i+1}</span>{article.headline}</h2>
+              <h2><span className="btn btn-primary">{i+1}</span> {article.headline}</h2>
               <p>{article.by}</p>
               <p>{article.section}</p>
               <p>{article.pubDate}</p>
               <a href={article.url} target="_blank" >{article.url}</a>
               <br/>
-              <button name={article._id} className="btn btn-primary" onClick={removeArticle}>Unsave Article</button>
+              <p>Date Saved: {article.dateSaved}</p>
+              <button name={article._id} className="btn btn-primary" onClick={removeArticle}>Unsave Article</button> 
             </div>
           ))
         }
