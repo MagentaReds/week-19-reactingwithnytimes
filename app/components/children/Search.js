@@ -1,7 +1,4 @@
-
-var Link = require("react-router").Link;
 var helpers = require("../utils/helpers.js");
-
 
 import React, {Component} from "react";
 
@@ -15,6 +12,13 @@ class Search extends Component {
       startYear: "",
       endYear: ""
     };
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.updateSearchTerm = this.updateSearchTerm.bind(this);
+    this.updateLimit = this.updateLimit.bind(this);
+    this.updateStartYear = this.updateStartYear.bind(this);
+    this.updateEndYear = this.updateEndYear.bind(this);
+    this.clearSearch = this.clearSearch.bind(this);
   }
 
   handleSubmit(event){
@@ -36,15 +40,16 @@ class Search extends Component {
       endYear: endYear
     });
 
-    
-    helpers.getNyTimesArticles(searchTerm, startYear, endYear).then(function(response){
-      console.log(response);
-      var returns = [];
-      for(var i=0; i<limit && i<response.data.response.docs.length; ++i)
-        returns.push(response.data.response.docs[i]);
+    if(searchTerm) {
+      helpers.getNyTimesArticles(searchTerm, startYear, endYear).then((response) => {
+        console.log(response);
+        var returns = [];
+        for(var i=0; i<limit && i<response.data.response.docs.length; ++i)
+          returns.push(response.data.response.docs[i]);
 
-      this.props.setResults(returns);
-    }.bind(this));
+        this.props.setResults(returns);
+      });
+    }
   }
 
   updateSearchTerm(event){
@@ -81,14 +86,14 @@ class Search extends Component {
             <span className="glyphicon glyphicon-th-list"> Search Parameters</span> 
         </div>
         <div className="panel-body">
-          <form onSubmit={this.handleSubmit.bind(this)} id="searchBox">
+          <form onSubmit={this.handleSubmit} id="searchBox">
             <div className="form-group">
               <label htmlFor="searchTerm">Search Term</label>
-              <input type="text" className="form-control" name="searchTerm" placeholder="Search anything" value={this.state.searchTerm} onChange={this.updateSearchTerm.bind(this)}/>
+              <input type="text" className="form-control" name="searchTerm" placeholder="Search anything" value={this.state.searchTerm} onChange={this.updateSearchTerm}/>
             </div>
             <div className="form-group">
               <label htmlFor="retrieveNumber">Number of Records to Retrieve</label>
-              <select className="form-control" name="retrieveNumber" value={this.state.limit} onChange={this.updateLimit.bind(this)}>
+              <select className="form-control" name="retrieveNumber" value={this.state.limit} onChange={this.updateLimit}>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -103,14 +108,14 @@ class Search extends Component {
             </div>
             <div className="form-group">
               <label htmlFor="startYear">Start Year (Optional)</label>
-              <input type="text" className="form-control" name="startYear" placeholder="" value={this.state.startYear} onChange={this.updateStartYear.bind(this)}/>
+              <input type="text" className="form-control" name="startYear" placeholder="" value={this.state.startYear} onChange={this.updateStartYear}/>
             </div>
             <div className="form-group">
               <label htmlFor="endYear">End Year (Optional)</label>
-              <input type="text" className="form-control" name="endYear" placeholder="" value={this.state.endYear} onChange={this.updateEndYear.bind(this)}/>
+              <input type="text" className="form-control" name="endYear" placeholder="" value={this.state.endYear} onChange={this.updateEndYear}/>
             </div>
             <button type="submit" id="searchButton" className="btn btn-default">Search</button>
-            <button id="clearButton" className="btn btn-danger" onClick={this.clearSearch.bind(this)}>Clear Results</button>
+            <button id="clearButton" className="btn btn-danger" onClick={this.clearSearch}>Clear Results</button>
           </form>
         </div>
       </div>
@@ -118,4 +123,4 @@ class Search extends Component {
   }
 }
 
-module.exports = Search;
+export default Search;
