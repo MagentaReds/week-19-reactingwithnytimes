@@ -7,7 +7,7 @@ const MoreInfoModal = (props) => {
         <div className="modal-content">
           <div className="modal-header">
             <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h2 className="modal-title text-center">Scott's Tots</h2>
+            <h2 className="modal-title text-center">Scott's Tots (The Office)</h2>
           </div>
           <div className="modal-body">
             <img className="img-responsive center-block" src="https://media.giphy.com/media/uCxR4xD2XDfhK/giphy.gif" />
