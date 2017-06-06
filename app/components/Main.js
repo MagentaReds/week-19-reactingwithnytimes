@@ -7,7 +7,8 @@ var helpers = require("./utils/helpers.js");
 
 var Search = require("./children/Search.js");
 var Results = require("./children/Results.js");
-var Saved = require("./children/Saved.js");
+//var Saved = require("./children/Saved.js");
+import Saved from "./children/Saved.js"
 
 import React, {Component} from "react";
 
@@ -91,7 +92,7 @@ class Main extends Component {
         <div>
           <Route exact path="/" render={()=><Results passedResults={this.state.searchResults} saveArticle={this.saveArticle.bind(this)}/>}/>
           <Route path="/results" render={()=><Results passedResults={this.state.searchResults} saveArticle={this.saveArticle.bind(this)}/>} />
-          <Route path="/saved" render={()=><Saved savedArticles={this.state.savedArticles} removeArticle={this.removeArticle.bind(this)}/>} />
+          <Route path="/saved" render={()=><Saved title="Saved Results" savedArticles={this.state.savedArticles} removeArticle={this.removeArticle.bind(this)}/>} />
         </div>
       </div>
       

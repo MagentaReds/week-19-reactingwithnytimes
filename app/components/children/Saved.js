@@ -1,10 +1,38 @@
-
-var Link = require("react-router").Link;
-
-
 import React, {Component} from "react";
+import Link from "react-router";
 
-class Saved extends Component {
+const Savec = (props) => {
+  const removerticle = (event) =>{
+    var index = event.target.name;
+    this.props.removeArticle(index);
+  }
+
+  return (
+    <div className="panel panel-primary">
+      <div className="panel-heading panelBack">
+        <span className="glyphicon glyphicon-paperclip">{props.title}</span> 
+      </div>
+      <div id="our-results" className="panel-body">
+        
+        {this.props.savedArticles.map((article, i) => (
+            <div key={i} id={"result_"+(i+1)} className="well">
+              <h2><span className="btn btn-primary">{i+1}</span>{article.headline}</h2>
+              <p>{article.by}</p>
+              <p>{article.section}</p>
+              <p>{article.pubDate}</p>
+              <a href={article.url} target="_blank" >{article.web_url}</a>
+              <br/>
+              <button name={article._id} className="btn btn-primary" onClick={this.removeArticle.bind(this)}>Unsave Article</button>
+            </div>
+          ))
+        }
+          
+      </div>
+    </div>
+  );
+}
+
+/*class Saved extends Component {
 
   removeArticle(event){
     var index = event.target.name;
@@ -37,6 +65,6 @@ class Saved extends Component {
       </div>
     );
   }
-}
+}*/
 
-module.exports = Saved;
+export default Saved;
