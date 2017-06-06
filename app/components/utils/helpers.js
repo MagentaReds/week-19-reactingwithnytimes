@@ -25,7 +25,7 @@ var helpers = {
   saveArticle: function(article) {
     var newArticle = {
       headline: article.headline.main,
-      sectionName: article.section_name,
+      section: article.section_name,
       pubDate: article.pub_date,
       url: article.web_url
     };

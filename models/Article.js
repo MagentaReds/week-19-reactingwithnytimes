@@ -13,14 +13,14 @@ var ArticleSchema = new Schema({
   },
   by: {
     type: String,
-    defaultValue: "No Author"
+    default: "No Author"
   },
   section: {
     type: String
   },
   dateSaved: {
     type: Date,
-    defaultValue: Date.now
+    default: Date.now
   }
 });
 

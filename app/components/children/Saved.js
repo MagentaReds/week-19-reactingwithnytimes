@@ -19,7 +19,7 @@ const Saved = (props) => {
               <p>{article.by}</p>
               <p>{article.section}</p>
               <p>{article.pubDate}</p>
-              <a href={article.url} target="_blank" >{article.web_url}</a>
+              <a href={article.url} target="_blank" >{article.url}</a>
               <br/>
               <button name={article._id} className="btn btn-primary" onClick={removeArticle}>Unsave Article</button>
             </div>
