@@ -14,7 +14,7 @@ var helpers = {
     if(startYear)
       params+="&begin_date="+startYear+"0101";
     if(endYear)
-      params+="&end_date="+startYear+"1231";
+      params+="&end_date="+endYear+"1231";
     
     //console.log(baseUrl);
     //console.log(params);
