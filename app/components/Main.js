@@ -75,6 +75,18 @@ class Main extends Component {
     }.bind(this));
   }
 
+  clearSearch() {
+    console.log("Clearing search history and resetting the search fields");
+    var newState = {
+      searchTerm: "", 
+      limit: 5,
+      startYear: "",
+      endYear: "",
+      searchResults: []
+    };
+    this.setState(newState);
+  }
+
   render() {
     return (
       <div className="container">
@@ -87,7 +99,7 @@ class Main extends Component {
           <Link to="/results"><button className="btn btn-success btn-lg">Results</button></Link>
           <Link to="/saved"><button className="btn btn-warning btn-lg">Saved Articles</button></Link>
         </div>
-        <Search setSearch={this.setSearch.bind(this)} setResults={this.setResults.bind(this)}/> 
+        <Search setSearch={this.setSearch.bind(this)} setResults={this.setResults.bind(this)} clearSearch={this.clearSearch.bind(this)}/> 
         <br/><br/>
         <div>
           <Route exact path="/" render={()=><Results passedResults={this.state.searchResults} saveArticle={this.saveArticle.bind(this)}/>}/>
