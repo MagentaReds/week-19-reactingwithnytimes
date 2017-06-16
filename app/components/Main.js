@@ -10,6 +10,7 @@ import Search from "./children/Search.js";
 import Saved from "./children/Saved.js";
 import Results from "./children/Results.js";
 import MoreInfoModal from "./children/MoreInfoModal.js";
+import SuccessModal from "./children/SuccessModal.js";
 
 import React, {Component} from "react";
 
@@ -23,7 +24,10 @@ class Main extends Component {
       startYear: "",
       endYear: "",
       searchResults: [], 
-      savedArticles: []
+      savedArticles: [],
+      modalTitle: "",
+      modalBody: "",
+      displayModal: false
     };
 
     this.setSearch = this.setSearch.bind(this);
@@ -36,6 +40,10 @@ class Main extends Component {
 
   componentDidUpdate(prevState) {
     //console.log(this.state.savedArticles);
+    if(this.state.displayModal===true){
+      this.setState({displayModal: false});
+      $("#displayModal").modal("show");
+    }
   }
 
   componentDidMount() {
@@ -65,7 +73,14 @@ class Main extends Component {
   saveArticle(index) {
     //console.log("Saving article at index " +index+" to mongodb");
     helpers.saveArticle(this.state.searchResults[index]).then((response) => {
-      this.getArticles();
+      if(response.data.errmsg && response.data.code===11000)
+        this.setState({modalTitle: "Unsuccess", modalBody: "Article Already Saved." , displayModal: true});
+      else {
+        this.setState({modalTitle: "Success!", modalBody: "Article Saved." , displayModal: true});
+        this.getArticles();
+      }
+    }, (response) => {
+       this.setState({modalTitle: "Unsuccess :(", modalBody: "Server Error." , displayModal: true})
     });
   }
 
@@ -115,6 +130,7 @@ class Main extends Component {
           <Route path="/saved" render={()=><Saved savedArticles={this.state.savedArticles} removeArticle={this.removeArticle}/>} />
         </div>
         <MoreInfoModal />
+        <SuccessModal title={this.state.modalTitle} body={this.state.modalBody} />
       </div>
       
     );
